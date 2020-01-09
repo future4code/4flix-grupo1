@@ -9,7 +9,7 @@ export class CreateMovieUseCase {
     ) {
         this.movieGateway = movieGateway
     }
-    async execute(input: CreateMovieUseCaseInput): Promise<string> {
+    async execute(input: CreateMovieUseCaseInput) {
         if (!input.title ||
             !input.date ||
             !input.length ||
@@ -23,7 +23,6 @@ export class CreateMovieUseCase {
         const movie = new Movie(input.title, input.date, input.length, input.synopsis, input.link, input.picture)
 
         await this.movieGateway.createMovie(movie)
-        return "Filme criado com sucesso!"
     }
 }
 
