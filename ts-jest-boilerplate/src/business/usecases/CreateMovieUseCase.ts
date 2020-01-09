@@ -1,9 +1,29 @@
-import {Movie} from "../entities/Movie"
+import { Movie } from "../entities/Movie"
+import { MovieGateway } from "../gateways/MovieGateway"
+import { MissingInformationError } from "../entities/errors/MissingInformationError"
 
 export class CreateMovieUseCase {
-    execute(input: CreateMovieUseCaseInput): CreateMovieUseCaseOutput {
-        const movie = new Movie (input.title, input.date, input.length, input.synopsis, input.link, input.picture)
-        return 
+    private movieGateway: MovieGateway
+    constructor(
+        movieGateway: MovieGateway
+    ) {
+        this.movieGateway = movieGateway
+    }
+    async execute(input: CreateMovieUseCaseInput): Promise<string> {
+        if (!input.title ||
+            !input.date ||
+            !input.length ||
+            !input.synopsis ||
+            !input.link ||
+            !input.picture
+        ) {
+            throw new MissingInformationError("Faltam informações para a criação do filme!")
+        }
+
+        const movie = new Movie(input.title, input.date, input.length, input.synopsis, input.link, input.picture)
+
+        await this.movieGateway.createMovie(movie)
+        return "Filme criado com sucesso!"
     }
 }
 
@@ -14,8 +34,4 @@ interface CreateMovieUseCaseInput {
     synopsis: string
     link: string
     picture: string
-}
-
-interface CreateMovieUseCaseOutput {
-    message: string
 }
