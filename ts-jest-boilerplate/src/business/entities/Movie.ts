@@ -1,4 +1,4 @@
-export class Movies {
+export class Movie {
     private title: string
     private date: string
     private length: string
